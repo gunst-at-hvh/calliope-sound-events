@@ -12,8 +12,7 @@ namespace sound {
     
     // State variables
     let threshold = 128;
-    let hysteresis = 10;
-    let isLoud = false;
+    let wasLoud = false;
     let isInitialized = false;
     
     /**
@@ -27,7 +26,6 @@ namespace sound {
     //% weight=100
     export function setSoundThreshold(value: number): void {
         threshold = Math.clamp(0, 255, value);
-        initSoundMonitoring();
     }
     
     /**
@@ -58,7 +56,7 @@ namespace sound {
     
     /**
      * Initialize the background sound monitoring
-     * Only runs once
+     * Only runs once and only when handlers are registered
      */
     function initSoundMonitoring(): void {
         if (isInitialized) return;
@@ -68,19 +66,20 @@ namespace sound {
             while (true) {
                 let currentLevel = input.soundLevel();
                 
-                if (!isLoud && currentLevel > threshold) {
-                    // Transition: quiet -> loud
-                    isLoud = true;
+                // Simple state machine - no hysteresis
+                if (currentLevel > threshold && !wasLoud) {
+                    // Just became loud
+                    wasLoud = true;
                     control.raiseEvent(SOUND_EVENT_SOURCE, SOUND_EVENT_LOUD);
                 } 
-                else if (isLoud && currentLevel < (threshold - hysteresis)) {
-                    // Transition: loud -> quiet (with hysteresis)
-                    isLoud = false;
+                else if (currentLevel <= threshold && wasLoud) {
+                    // Just became quiet
+                    wasLoud = false;
                     control.raiseEvent(SOUND_EVENT_SOURCE, SOUND_EVENT_QUIET);
                 }
                 
-                // Poll every 50ms (20 times per second)
-                basic.pause(50);
+                // Poll every 100ms (10 times per second)
+                basic.pause(100);
             }
         });
     }
