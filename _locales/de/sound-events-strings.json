@@ -1,0 +1,9 @@
+{
+    "sound.setSoundThreshold|block": "setze Schwellenwert für laut auf %value",
+    "sound.onLoud|block": "wenn laut",
+    "sound.onQuiet|block": "wenn ruhig",
+    "sound|block": "Sound",
+    "{id:category}Sound": "Sound",
+    "{id:group}Events": "Events",
+    "{id:group}Properties": "Eigenschaften"
+}
