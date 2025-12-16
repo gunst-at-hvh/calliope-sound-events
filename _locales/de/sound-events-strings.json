@@ -2,6 +2,7 @@
     "sound.setSoundThreshold|block": "setze Schwellenwert für laut auf %value",
     "sound.onLoud|block": "wenn laut",
     "sound.onQuiet|block": "wenn ruhig",
+    "sound.checkSound|block": "prüfe Lautstärke",
     "sound|block": "Sound",
     "{id:category}Sound": "Sound",
     "{id:group}Events": "Events",

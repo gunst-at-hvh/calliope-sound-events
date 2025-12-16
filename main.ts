@@ -1,17 +1,14 @@
 /**
  * Sound event handlers for Calliope mini V1
- * Minimal implementation
+ * Simple implementation without background tasks
  */
 
 namespace sound {
     
-    const SOUND_EVENT_SOURCE = 9000;
-    const SOUND_EVENT_LOUD = 1;
-    const SOUND_EVENT_QUIET = 2;
-    
     let threshold = 128;
+    let loudHandler: () => void = null;
+    let quietHandler: () => void = null;
     let wasLoud = false;
-    let started = false;
     
     /**
      * Set the threshold for loud sounds
@@ -34,9 +31,9 @@ namespace sound {
     //% block="wenn laut"
     //% blockNamespace="input"
     //% weight=90
+    //% draggableParameters="reporter"
     export function onLoud(handler: () => void): void {
-        control.onEvent(SOUND_EVENT_SOURCE, SOUND_EVENT_LOUD, handler);
-        startMonitoring();
+        loudHandler = handler;
     }
     
     /**
@@ -47,30 +44,33 @@ namespace sound {
     //% block="wenn ruhig"
     //% blockNamespace="input"
     //% weight=89
+    //% draggableParameters="reporter"
     export function onQuiet(handler: () => void): void {
-        control.onEvent(SOUND_EVENT_SOURCE, SOUND_EVENT_QUIET, handler);
-        startMonitoring();
+        quietHandler = handler;
     }
     
-    function startMonitoring(): void {
-        if (started) return;
-        started = true;
+    /**
+     * Check sound level and trigger events (place in forever loop)
+     */
+    //% blockId=sound_check
+    //% block="prüfe Lautstärke"
+    //% blockNamespace="input"
+    //% weight=80
+    export function checkSound(): void {
+        let level = input.soundLevel();
         
-        control.inBackground(function() {
-            while (true) {
-                let level = input.soundLevel();
-                
-                if (level > threshold && !wasLoud) {
-                    wasLoud = true;
-                    control.raiseEvent(SOUND_EVENT_SOURCE, SOUND_EVENT_LOUD);
-                } 
-                else if (level <= threshold && wasLoud) {
-                    wasLoud = false;
-                    control.raiseEvent(SOUND_EVENT_SOURCE, SOUND_EVENT_QUIET);
-                }
-                
-                basic.pause(200);
+        if (level > threshold && !wasLoud) {
+            // Became loud
+            wasLoud = true;
+            if (loudHandler) {
+                loudHandler();
             }
-        });
+        } else if (level <= threshold && wasLoud) {
+            // Became quiet
+            wasLoud = false;
+            if (quietHandler) {
+                quietHandler();
+            }
+        }
     }
 }
