@@ -1,7 +1,7 @@
 {
-    "sound.setSoundThreshold|block": "setze Schwellenwert für laut auf %value",
-    "sound.onLoud|block": "wenn laut",
-    "sound.onQuiet|block": "wenn ruhig",
-    "sound|block": "Sound",
-    "{id:category}Sound": "Sound"
+    "laermAlarm.setSchwellenwert|block": "setze Schwellenwert für laut auf %value",
+    "laermAlarm.wennLaut|block": "wenn laut",
+    "laermAlarm.wennRuhig|block": "wenn ruhig",
+    "laermAlarm|block": "Lärm-Alarm",
+    "{id:category}laermAlarm": "Lärm-Alarm"
 }
