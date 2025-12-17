@@ -1,7 +1,5 @@
 {
-    "laermAlarm.setSchwellenwert|block": "setze Schwellenwert für laut auf %value",
-    "laermAlarm.wennLaut|block": "wenn laut",
-    "laermAlarm.wennRuhig|block": "wenn ruhig",
-    "laermAlarm|block": "Lärm-Alarm",
-    "{id:category}laermAlarm": "Lärm-Alarm"
+    "input.onLoud|block": "wenn Lautstärke über %threshold steigt",
+    "input.onQuiet|block": "wenn Lautstärke unter %threshold fällt",
+    "{id:group}Lautstärke": "Lautstärke"
 }
